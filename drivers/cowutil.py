@@ -324,11 +324,15 @@ def getVdiTypeFromImageFormat(image_format: ImageFormat) -> str:
 
 def getCowUtilFromImageFormat(image_format: ImageFormat) -> CowUtil:
     import vhdutil
+    import qcow2util
 
     if image_format in (ImageFormat.RAW, ImageFormat.VHD):
         return vhdutil.VhdUtil()
 
-    assert False, f"Unsupported image format: {image_format}"
+    if image_format == ImageFormat.QCOW2:
+        return qcow2util.QCowUtil()
+
+    assert False, f"Unsupported image format: {getVdiTypeFromImageFormat(image_format)}"
 
 def getCowUtil(vdi_type: str) -> CowUtil:
     return getCowUtilFromImageFormat(getImageFormatFromVdiType(vdi_type))
